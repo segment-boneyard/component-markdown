@@ -25,9 +25,9 @@ function compileMarkdown (builder) {
       var contents = fs.readFileSync(builder.path(file), 'utf8')
         , html     = marked(contents)
         , js       = str2js(html)
-        , name     = path.basename(file, path.extname(file)) + '.js';
+        , newFile  = path.basename(file, path.extname(file)) + '.js';
 
-      builder.addFile('scripts', name, js);
+      builder.addFile('scripts', newFile, js);
     });
 
     callback();
