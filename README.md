@@ -41,6 +41,6 @@
 
   ```js
   var tip     = require('tip')
-    , readme  = require('readme');
+    , readme  = require('readme')
     , history = require('history');
   ```
