@@ -51,7 +51,7 @@ exports.options = function (options) {
  * https://github.com/github/markup/blob/b865add2e053f8cea3d7f4d9dcba001bdfd78994/lib/github/markups.rb#L1
  */
 
-var matcher = /.(md|mkdn?|mdown|markdown)/;
+var matcher = /\.(md|mkdn?|mdown|markdown)/;
 
 
 /**
