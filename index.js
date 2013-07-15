@@ -1,47 +1,66 @@
-var fs     = require('fs')
-  , path   = require('path')
+var Builder = require('component-builder')
+  , fs = require('fs')
+  , path = require('path')
   , marked = require('marked')
   , str2js = require('string-to-js')
-  , debug  = require('debug')('component-markdown');
-
-
-
-module.exports = compileMarkdown;
+  , debug = require('debug')('component-markdown');
 
 
 /**
- * Compile Markdown.
+ * Plugin.
+ *
+ * @param {Object} builder or markdown options
  */
 
-function compileMarkdown (builder) {
-  builder.hook('before scripts', function (builder, callback) {
-    if (!builder.conf.documents) return callback();
+module.exports = function (builder) {
+  debugger;
 
-    var documents = builder.conf.documents.filter(filterMarkdown);
+  // no options
+  if (builder instanceof Builder) return compileMarkdown(builder);
 
-    documents.forEach(function (file) {
-      debug('compiling: %s', file);
-
-      var contents = fs.readFileSync(builder.path(file), 'utf8')
-        , html     = marked(contents)
-        , js       = str2js(html)
-        , newFile  = path.basename(file, path.extname(file)) + '.js';
-
-      builder.addFile('scripts', newFile, js);
-    });
-
-    callback();
-  });
-}
+  // options
+  exports.options(builder);
+  return compileMarkdown;
+};
 
 
 /**
  * Set options. Passes 'em straight to marked, go wild.
+ *
+ * @param {Object} options
  */
 
 exports.options = function (options) {
   marked.setOptions(options);
 };
+
+
+/**
+ * Compile Markdown.
+ *
+ * @param {Object} builder
+ */
+
+function compileMarkdown (builder) {
+  builder.hook('before scripts', function (builder, callback) {
+    if (!builder.config.templates) return callback();
+
+    var templates = builder.config.templates.filter(filterMarkdown);
+
+    templates.forEach(function (file) {
+      debug('compiling: %s', file);
+
+      var str = fs.readFileSync(builder.path(file), 'utf8');
+      var html = marked(str);
+      var js = str2js(html);
+
+      builder.addFile('scripts', file + '.js', js);
+      builder.removeFile('templates', file);
+    });
+
+    callback();
+  });
+}
 
 
 /**
@@ -56,6 +75,9 @@ var matcher = /\.(md|mkdn?|mdown|markdown)/;
 
 /**
  * Filter for Markdown files.
+ *
+ * @param {String} filename
+ * @return {Boolean}
  */
 
 function filterMarkdown (filename) {

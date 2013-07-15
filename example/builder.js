@@ -1,7 +1,6 @@
 var Builder  = require('component-builder')
-  , fs       = require('fs')
+  , fs = require('fs')
   , markdown = require('../');
-
 
 
 var builder = new Builder(__dirname);

@@ -8,11 +8,11 @@
 
 ## Usage
   
-  Add your Markdown files to the `documents` array in your `component.json`:
+  Add your Markdown files to the `templates` array in your `component.json`:
 
   ```js
   {
-    "documents": [
+    "templates": [
       "readme.md",
       "history.markdown"
     ]
@@ -22,8 +22,8 @@
   Use the plugin during your build process:
 
   ```js
-  var fs       = require('fs')
-    , Builder  = require('component-builder')
+  var fs = require('fs')
+    , Builder = require('component-builder')
     , markdown = require('component-markdown');
 
   var builder = new Builder(__dirname);
@@ -40,7 +40,6 @@
   And then require the files in your Javascript:
 
   ```js
-  var tip     = require('tip')
-    , readme  = require('readme')
-    , history = require('history');
+  var readme = require('readme.md')
+    , history = require('history.markdown');
   ```

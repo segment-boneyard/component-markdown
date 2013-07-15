@@ -1,11 +1,4 @@
 
-
-/**
- * hasOwnProperty.
- */
-
-var has = Object.prototype.hasOwnProperty;
-
 /**
  * Require the given path.
  *
@@ -70,7 +63,6 @@ require.aliases = {};
 
 require.resolve = function(path) {
   if (path.charAt(0) === '/') path = path.slice(1);
-  var index = path + '/index.js';
 
   var paths = [
     path,
@@ -82,11 +74,8 @@ require.resolve = function(path) {
 
   for (var i = 0; i < paths.length; i++) {
     var path = paths[i];
-    if (has.call(require.modules, path)) return path;
-  }
-
-  if (has.call(require.aliases, index)) {
-    return require.aliases[index];
+    if (require.modules.hasOwnProperty(path)) return path;
+    if (require.aliases.hasOwnProperty(path)) return require.aliases[path];
   }
 };
 
@@ -139,7 +128,7 @@ require.register = function(path, definition) {
  */
 
 require.alias = function(from, to) {
-  if (!has.call(require.modules, from)) {
+  if (!require.modules.hasOwnProperty(from)) {
     throw new Error('Failed to alias "' + from + '", it does not exist');
   }
   require.aliases[to] = from;
@@ -201,12 +190,12 @@ require.relative = function(parent) {
    */
 
   localRequire.exists = function(path) {
-    return has.call(require.modules, localRequire.resolve(path));
+    return require.modules.hasOwnProperty(localRequire.resolve(path));
   };
 
   return localRequire;
 };
-require.register("example/README.js", function(exports, require, module){
-module.exports = '<h1>component-markdown</h1>\n<p>  A plugin to compile Markdown to Javascript for the component builder.</p>\n<h2>Install</h2>\n<pre><code>$ npm install component-markdown</code></pre>\n<h2>Usage</h2>\n<p>  Add your <code>.markdown</code> files to the <code>documents</code> array in your <code>component.json</code>:</p>\n<pre><code class="lang-js">  {\n    &quot;documents&quot;: [\n      &quot;readme.md&quot;,\n      &quot;history.markdown&quot;\n    ]\n  }</code></pre>\n<p>  Use the plugin during your build process:</p>\n<pre><code class="lang-js">  var fs      = require(&#39;fs&#39;)\n    , Builder = require(&#39;component-builder&#39;)\n    , jade    = require(&#39;component-jade&#39;);\n\n  var builder = new Builder(__dirname);\n\n  builder.use(jade);\n\n  builder.build(function(err, res){\n    if (err) throw err;\n    fs.writeFileSync(&#39;build/build.js&#39;, res.require + res.js);\n    if (res.css) fs.writeFileSync(&#39;build/build.css&#39;, res.css);\n  });</code></pre>\n<p>  And then require the files in your Javascript:</p>\n<pre><code class="lang-js">  var tip      = require(&#39;tip&#39;)\n    , template = require(&#39;template&#39;);</code></pre>\n';
+require.register("example/../Readme.md.js", function(exports, require, module){
+module.exports = '<h1>component-markdown</h1>\n<p>  A plugin to compile Markdown to Javascript for the component builder.</p>\n<h2>Install</h2>\n<pre><code>$ npm install component-markdown</code></pre>\n<h2>Usage</h2>\n<p>  Add your Markdown files to the <code>templates</code> array in your <code>component.json</code>:</p>\n<pre><code class="lang-js">  {\n    &quot;templates&quot;: [\n      &quot;readme.md&quot;,\n      &quot;history.markdown&quot;\n    ]\n  }</code></pre>\n<p>  Use the plugin during your build process:</p>\n<pre><code class="lang-js">  var fs = require(&#39;fs&#39;)\n    , Builder = require(&#39;component-builder&#39;)\n    , markdown = require(&#39;component-markdown&#39;);\n\n  var builder = new Builder(__dirname);\n\n  builder.use(markdown);\n\n  builder.build(function(err, res){\n    if (err) throw err;\n    fs.writeFileSync(&#39;build/build.js&#39;, res.require + res.js);\n    if (res.css) fs.writeFileSync(&#39;build/build.css&#39;, res.css);\n  });</code></pre>\n<p>  And then require the files in your Javascript:</p>\n<pre><code class="lang-js">  var readme = require(&#39;readme.md&#39;)\n    , history = require(&#39;history.markdown&#39;);</code></pre>\n';
 });
 

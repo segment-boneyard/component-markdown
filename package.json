@@ -1,12 +1,8 @@
 {
   "name": "component-markdown",
-  "version": "0.0.1",
+  "version": "0.1.0",
   "description": "A plugin to compile Markdown to Javascript for the component builder.",
-  "keywords": [
-    "component",
-    "markdown",
-    "marked"
-  ],
+  "keywords": ["component", "markdown", "marked"],
   "author": "Segment.io <friends@segment.io>",
   "license": "MIT",
   "repository": {
@@ -14,12 +10,10 @@
     "url": "git://github.com/segmentio/component-markdown.git"
   },
   "dependencies": {
+    "component-builder": "*",
     "debug": "~0.7.2",
-    "marked": "~0.2.8",
+    "marked": "~0.2.9",
     "string-to-js": "0.0.1"
-  },
-  "devDependencies": {
-    "component-builder": "git://github.com/calvinfo/builder.js.git#conf-race"
   },
   "main": "index.js"
 }
